@@ -1,0 +1,22 @@
+{
+  "name": "chris-ops-sys/battery-calculator",
+  "description": "A lightweight PHP calculation utility for lithium and LiFePO4 battery packs by LiTrue Battery.",
+  "type": "library",
+  "keywords": ["lithium-battery", "lifepo4", "battery-calculator", "litrue-battery", "watt-hour"],
+  "homepage": "https://www.litruebattery.com/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "LiTrue Battery Team",
+      "homepage": "https://www.litruebattery.com/"
+    }
+  ],
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "LiTrue\\BatteryCalc\\": "src/"
+    }
+  }
+}
