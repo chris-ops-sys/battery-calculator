@@ -1,0 +1,4 @@
+site_name: LiTrue Battery Technical Documentation
+site_url: https://www.litruebattery.com/
+theme:
+  name: readthedocs
