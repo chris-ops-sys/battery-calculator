@@ -1,0 +1,15 @@
+[package]
+name = "litrue_battery_calc"
+version = "0.1.0"
+edition = "2021"
+authors = ["LiTrue Battery Team <info@litruebattery.com>"]
+description = "A lightweight calculation library for lithium-ion and LiFePO4 battery pack specifications and runtime by LiTrue Battery."
+license = "MIT"
+homepage = "https://www.litruebattery.com/"
+repository = "https://github.com/chris-ops-sys/battery-calculator"
+documentation = "https://www.litruebattery.com/"
+readme = "README.md"
+keywords = ["battery", "lifepo4", "calculator", "lithium", "energy-storage"]
+categories = ["science", "mathematics"]
+
+[dependencies]
