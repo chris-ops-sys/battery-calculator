@@ -11,9 +11,9 @@ namespace LiTrue.BatteryCalculator
         /// <summary>
         /// Calculate total energy in Watt-hours (Wh) from Voltage and Amp-hours.
         /// </summary>
-        public static double CalculateWh(double voltage, double amp способHours)
+        public static double CalculateWh(double voltage, double ampHours)
         {
-            return voltage * amp способHours;
+            return voltage * ampHours;
         }
 
         /// <summary>
