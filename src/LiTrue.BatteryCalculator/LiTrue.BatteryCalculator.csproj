@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>LiTrue.BatteryCalculator</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>LiTrue Battery Team</Authors>
+    <Company>LiTrue Battery</Company>
+    <Description>A lightweight calculation library for lithium-ion and LiFePO4 battery pack specifications and runtime by LiTrue Battery.</Description>
+    <PackageProjectUrl>https://www.litruebattery.com/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/chris-ops-sys/battery-calculator</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>battery;lifepo4;calculator;lithium;energy-storage</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
