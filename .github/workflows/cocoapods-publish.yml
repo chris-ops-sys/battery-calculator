@@ -1,0 +1,21 @@
+name: Publish to CocoaPods
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install CocoaPods
+        run: sudo gem install cocoapods
+
+      - name: Register CocoaPods Trunk Session
+        run: |
+          pod trunk register contact@litruebattery.com "LiTrue Battery" --description="GitHub Actions CI"
+
+      - name: Lint and Push Podspec
+        run: |
+          pod trunk push LiTrueBatteryCalc.podspec --allow-warnings
