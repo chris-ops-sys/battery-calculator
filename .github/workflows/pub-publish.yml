@@ -1,0 +1,22 @@
+name: Publish to Pub.dev
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    permissions:
+      id-token: write # 必须配置此权限用于 Pub.dev OIDC 校验
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Publish to Pub.dev
+        run: dart pub publish -f
