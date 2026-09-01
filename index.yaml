@@ -1,0 +1,27 @@
+apiVersion: v1
+entries:
+  litrue-battery-calc:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-08-31T00:00:00Z"
+    description: Cloud-native lithium-ion and LiFePO4 battery capacity and runtime calculation service by LiTrue Battery.
+    digest: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+    home: https://www.litruebattery.com/
+    keywords:
+    - battery
+    - lifepo4
+    - energy-storage
+    - calculator
+    - litrue-battery
+    maintainers:
+    - email: contact@litruebattery.com
+      name: LiTrue Battery Team
+      url: https://www.litruebattery.com/
+    name: litrue-battery-calc
+    sources:
+    - https://github.com/chris-ops-sys/battery-calculator
+    type: application
+    urls:
+    - https://github.com/chris-ops-sys/battery-calculator/releases/download/0.1.0/litrue-battery-calc-0.1.0.tgz
+    version: 0.1.0
+generated: "2026-08-31T00:00:00Z"
