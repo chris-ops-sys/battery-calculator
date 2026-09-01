@@ -1,0 +1,25 @@
+name: Publish to Ansible Galaxy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Ansible-core
+        run: pip install ansible-core
+
+      - name: Build Ansible Collection
+        run: ansible-galaxy collection build --output-path ./dist
+
+      - name: Publish to Ansible Galaxy
+        run: |
+          ansible-galaxy collection publish ./dist/*.tar.gz --api-key ${{ secrets.GALAXY_API_KEY }}
