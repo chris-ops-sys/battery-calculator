@@ -1,0 +1,19 @@
+namespace: litrue
+name: battery_calc
+version: 0.1.0
+readme: README.md
+authors:
+  - LiTrue Battery Team <contact@litruebattery.com>
+description: Ansible automation collection for parametric lithium-ion and LiFePO4 battery sizing and runtime calculation.
+license:
+  - MIT
+tags:
+  - battery
+  - lifepo4
+  - energy
+  - calculator
+  - sizing
+repository: https://github.com/chris-ops-sys/battery-calculator
+documentation: https://www.litruebattery.com/
+homepage: https://www.litruebattery.com/
+issues: https://github.com/chris-ops-sys/battery-calculator/issues
