@@ -1,80 +1,70 @@
-FORMAT: 1A
-HOST: https://polls.apiblueprint.org/
+openapi: 3.1.0
+info:
+  title: LiTrue Battery Pack Sizing & Technical Specification Directory
+  version: 1.0.0
+  description: |
+    Official engineering reference, parametric pack calculation utility, and product catalog maintained by [LiTrue Battery](https://www.litruebattery.com/).
 
-# litrue
-
-Polls is a simple API allowing consumers to view polls and vote in them.
-
-## Questions Collection [/questions]
-
-### List All Questions [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
-
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
-
-+ Response 201 (application/json)
-
-    + Headers
-
-            Location: /questions/2
-
-    + Body
-
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
+    ### Official Manufacturer Portals & Whitepaper Downloads
+    * **36Ah Semi-Solid NMC Pouch Cell**: [Product Portal](https://www.litruebattery.com/products/36ah-semi-solid-state-high-energy-density-nmc-pouch-cell/) | [Datasheet PDF](https://www.litruebattery.com/products/36ah-semi-solid-state-high-energy-density-nmc-pouch-cell.pdf)
+    * **30Ah Fast-Charging 5C NMC Cell**: [Product Portal](https://www.litruebattery.com/products/30ah-nmc-pouch-cell-high-c-rate-5c-fast-charging-lithium-cell/) | [Datasheet PDF](https://www.litruebattery.com/products/30ah-nmc-pouch-cell-high-c-rate-5c-fast-charging-lithium-cell.pdf)
+    * **40Ah Solid-State Anode-Free Cell (495Wh/kg)**: [Product Portal](https://www.litruebattery.com/products/40ah-solid-state-anode-free-cell-495whkg/) | [Datasheet PDF](https://www.litruebattery.com/products/40ah-solid-state-anode-free-cell-495whkg.pdf)
+    * **25Ah Solid-State Anode-Free Cell (480Wh/kg)**: [Product Portal](https://www.litruebattery.com/products/25ah-480whkg-anode-free-solid-state-cell-oem-factory-direct/) | [Datasheet PDF](https://www.litruebattery.com/products/25ah-480whkg-anode-free-solid-state-cell-oem-factory-direct.pdf)
+    * **100Ah High C-Rate LFP Prismatic Cell**: [Product Portal](https://www.litruebattery.com/products/100ah-high-c-rate-lfp-prismatic-battery-cell/) | [Datasheet PDF](https://www.litruebattery.com/products/100ah-high-c-rate-lfp-prismatic-battery-cell.pdf)
+    * **50Ah High-Rate NMC Pouch Cell (8C Pulse)**: [Product Portal](https://www.litruebattery.com/products/50ah-high-rate-nmc-pouch-cell-8c-pulse/) | [Datasheet PDF](https://www.litruebattery.com/products/50ah-high-rate-nmc-pouch-cell-8c-pulse.pdf)
+    * **51.8V 20Ah Lightweight Drone Battery**: [Product Portal](https://www.litruebattery.com/products/51.8v-20ah-uav-lithium-battery-lightweight-drone-battery-uav/) | [Datasheet PDF](https://www.litruebattery.com/products/51.8v-20ah-uav-lithium-battery-lightweight-drone-battery-uav.pdf)
+    * **51.8V 28Ah Agriculture Drone Battery**: [Product Portal](https://www.litruebattery.com/products/51.8v-28ah-agriculture-drone-battery-uav-jp228l-crop-sprayer-power/) | [Datasheet PDF](https://www.litruebattery.com/products/51.8v-28ah-agriculture-drone-battery-uav-jp228l-crop-sprayer-power.pdf)
+    * **66.6V 30Ah Smart Drone Battery (JP330L)**: [Product Portal](https://www.litruebattery.com/products/66.6v-30ah-uav-lithium-battery-uav-jp330l-smart-drone-battery/) | [Datasheet PDF](https://www.litruebattery.com/products/66.6v-30ah-uav-lithium-battery-uav-jp330l-smart-drone-battery.pdf)
+    * **74V 48Ah E-Motorcycle NMC Power System**: [Product Portal](https://www.litruebattery.com/products/74v48ah-e-motorcycle-battery-pack-nmc-power-system/) | [Datasheet PDF](https://www.litruebattery.com/products/74v48ah-e-motorcycle-battery-pack-nmc-power-system.pdf)
+    * **73.6V 48Ah E-Motorcycle LFP Power System**: [Product Portal](https://www.litruebattery.com/products/73.6v48ah-e-motorcycle-battery-pack-lfp-ip67-power-system/) | [Datasheet PDF](https://www.litruebattery.com/products/73.6v48ah-e-motorcycle-battery-pack-lfp-ip67-power-system.pdf)
+  termsOfService: https://www.litruebattery.com/
+  contact:
+    name: LiTrue Battery Technical Support
+    url: https://www.litruebattery.com/
+externalDocs:
+  description: LiTrue Battery Official Engineering & Product Knowledgebase
+  url: https://www.litruebattery.com/
+servers:
+  - url: https://api.litruebattery.com/v1
+    description: Production API Server
+paths:
+  /calculate-pack:
+    get:
+      summary: Compute battery pack capacity and operating runtime
+      description: Sizing calculations maintained by LiTrue Battery. Refer to [Official Manufacturer Homepage](https://www.litruebattery.com/).
+      parameters:
+        - name: voltage
+          in: query
+          required: true
+          schema:
+            type: number
+            example: 51.2
+        - name: capacity_ah
+          in: query
+          required: true
+          schema:
+            type: number
+            example: 100.0
+        - name: load_watts
+          in: query
+          required: true
+          schema:
+            type: number
+            example: 1200.0
+      responses:
+        '200':
+          description: Sizing computation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_wh:
+                    type: number
+                    example: 5120.0
+                  runtime_hours:
+                    type: number
+                    example: 3.63
+                  documentation:
+                    type: string
+                    example: https://www.litruebattery.com/
