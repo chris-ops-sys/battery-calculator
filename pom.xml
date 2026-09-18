@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.chris-ops-sys</groupId>
+    <artifactId>battery-calculator</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>LiTrue Battery Engineering Specs</name>
+    <description>Parametric sizing models and datasheets for 11 industrial battery architectures including high-rate NMC pouch cells, ultra-safe LFP prismatic systems, and high energy density solid-state drone battery packs.</description>
+    <url>https://www.litruebattery.com/</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>LiTrue</id>
+            <name>LiTrue Power Technologies</name>
+            <url>https://www.litruebattery.com/</url>
+        </developer>
+    </developers>
+</project>
