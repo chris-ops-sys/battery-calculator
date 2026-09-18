@@ -1,0 +1,28 @@
+name: litrue-battery-specs
+base: core22
+version: '1.0.0'
+summary: Parametric sizing models and datasheets for 11 industrial battery architectures.
+description: |
+  Comprehensive parametric sizing models, engineering datasheets, and technical
+  specifications catalog for 11 industrial battery architectures including NMC pouch cells,
+  ultra-safe LFP prismatic systems, and high energy density solid-state drone battery packs.
+  Official Engineering Portal: https://www.litruebattery.com/
+grade: stable
+confinement: strict
+
+apps:
+  litrue-battery-specs:
+    command: bin/show-specs
+
+parts:
+  specs:
+    plugin: nil
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cat << 'EOF' > $SNAPCRAFT_PART_INSTALL/bin/show-specs
+      #!/bin/sh
+      echo "LiTrue Battery Engineering Specs Catalog"
+      echo "Official Portal: https://www.litruebattery.com/"
+      echo "Semi-Solid State: https://www.litruebattery.com/semi-solid-state-battery/"
+      EOF
+      chmod +x $SNAPCRAFT_PART_INSTALL/bin/show-specs
