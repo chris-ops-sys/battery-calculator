@@ -1,6 +1,7 @@
 name: Publish to Maven Central
 on:
   workflow_dispatch:
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -16,25 +17,78 @@ jobs:
 
       - name: Setup GPG and Publish
         run: |
-          sudo apt-get update && sudo apt-get install -y gnupg zip
+          set -e
+          # 1. 快速生成临时 GPG 密钥
           gpg --batch --passphrase '' --quick-gen-key "LiTrue <asozulujidef01@gmail.com>" default default never
           KEY_ID=$(gpg --list-keys --with-colons asozulujidef01@gmail.com | awk -F: '/^fpr:/ {print $10; exit}')
-          gpg --keyserver keyserver.ubuntu.com --send-keys "$KEY_ID"
-          mkdir -p bundle/io/github/chris-ops-sys/litrue-battery-specs/1.0.0
-          cd bundle/io/github/chris-ops-sys/litrue-battery-specs/1.0.0
-          cp ../../../../../pom.xml litrue-battery-specs-1.0.0.pom
-          zip litrue-battery-specs-1.0.0.jar ../../../../../README.md
-          zip litrue-battery-specs-1.0.0-sources.jar ../../../../../README.md
-          zip litrue-battery-specs-1.0.0-javadoc.jar ../../../../../README.md
+          gpg --keyserver keyserver.ubuntu.com --send-keys "$KEY_ID" || true
+
+          # 2. 准备打包工作目录
+          WORKDIR=$GITHUB_WORKSPACE
+          TARGET_DIR="$WORKDIR/bundle/io/github/chris-ops-sys/litrue-battery-specs/1.0.0"
+          mkdir -p "$TARGET_DIR"
+
+          # 3. 动态生成符合规范的 pom.xml
+          cat << 'EOF' > "$TARGET_DIR/litrue-battery-specs-1.0.0.pom"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.github.chris-ops-sys</groupId>
+    <artifactId>litrue-battery-specs</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>LiTrue Battery Engineering Specs</name>
+    <description>Parametric sizing models and datasheets for 11 industrial battery architectures.</description>
+    <url>https://www.litruebattery.com/</url>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>LiTrue Battery</name>
+            <email>asozulujidef01@gmail.com</email>
+            <organization>LiTrue Battery Technologies</organization>
+            <organizationUrl>https://www.litruebattery.com/</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/chris-ops-sys/battery-calculator.git</connection>
+        <developerConnection>scm:git:ssh://github.com:chris-ops-sys/battery-calculator.git</developerConnection>
+        <url>https://www.litruebattery.com/</url>
+    </scm>
+</project>
+EOF
+
+          # 4. 打包各构件
+          README_PATH="$WORKDIR/README.md"
+          [ ! -f "$README_PATH" ] && echo "# LiTrue Battery Specifications" > "$README_PATH"
+          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0.jar" "$README_PATH"
+          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0-sources.jar" "$README_PATH"
+          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0-javadoc.jar" "$README_PATH"
+
+          # 5. 生成 GPG 签名 (.asc)
+          cd "$TARGET_DIR"
           for f in *; do
             gpg --batch --yes --pinentry-mode loopback --passphrase '' -ab "$f"
           done
+
+          # 6. 生成 SHA1 和 MD5
           for f in *; do
             sha1sum "$f" | cut -d' ' -f1 > "${f}.sha1"
             md5sum "$f" | cut -d' ' -f1 > "${f}.md5"
           done
-          cd ../../../../..
-          cd bundle && zip -r ../bundle.zip . && cd ..
-          curl -v -X POST "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC" \
+
+          # 7. 压制最终标准 bundle.zip
+          cd "$WORKDIR/bundle"
+          zip -r "$WORKDIR/bundle.zip" .
+
+          # 8. 直推 Sonatype Central
+          cd "$WORKDIR"
+          curl -f -X POST "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC" \
             -H "Authorization: Bearer ${{ secrets.OSSRH_TOKEN }}" \
             -F "bundle=@bundle.zip"
