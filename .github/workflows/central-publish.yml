@@ -9,55 +9,78 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Sign and Publish
+      - name: Clean, Sign and Publish
         run: |
           set -e
+          # 1. 生成 GPG 密钥并分发公钥
           gpg --batch --passphrase '' --quick-gen-key "LiTrue <asozulujidef01@gmail.com>" default default never
           KEY_ID=$(gpg --list-keys --with-colons asozulujidef01@gmail.com | awk -F: '/^fpr:/ {print $10; exit}')
           gpg --keyserver keyserver.ubuntu.com --send-keys "$KEY_ID" || true
 
+          # 2. 彻底清理旧 bundle 目录，确保无 com.github 冲突
+          rm -rf bundle bundle.zip
           TARGET_DIR="bundle/io/github/chris-ops-sys/litrue-battery-specs/1.0.0"
           mkdir -p "$TARGET_DIR"
-          cp pom.xml "$TARGET_DIR/litrue-battery-specs-1.0.0.pom"
 
+          # 3. 写入严格匹配 io.github.chris-ops-sys 命名空间的规范 pom.xml
+          cat << 'EOF' > "$TARGET_DIR/litrue-battery-specs-1.0.0.pom"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.github.chris-ops-sys</groupId>
+    <artifactId>litrue-battery-specs</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>LiTrue Battery Engineering Specs</name>
+    <description>Parametric sizing models and datasheets for 11 industrial battery architectures.</description>
+    <url>https://www.litruebattery.com/</url>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>LiTrue Battery</name>
+            <email>asozulujidef01@gmail.com</email>
+            <organization>LiTrue Battery Technologies</organization>
+            <organizationUrl>https://www.litruebattery.com/</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/chris-ops-sys/battery-calculator.git</connection>
+        <developerConnection>scm:git:ssh://github.com:chris-ops-sys/battery-calculator.git</developerConnection>
+        <url>https://www.litruebattery.com/</url>
+    </scm>
+</project>
+EOF
+
+          # 4. 生成规范的 jar 构件
           [ ! -f README.md ] && echo "# LiTrue Battery Specifications" > README.md
           zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0.jar" README.md
           zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0-sources.jar" README.md
           zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0-javadoc.jar" README.md
 
+          # 5. 全量生成 .asc 签名
           cd "$TARGET_DIR"
-          for f in *; do
+          for f in litrue-battery-specs-1.0.0*; do
             gpg --batch --yes --pinentry-mode loopback --passphrase '' -ab "$f"
           done
 
-          for f in *; do
+          # 6. 生成 sha1 与 md5 校验文件
+          for f in litrue-battery-specs-1.0.0*; do
             sha1sum "$f" | cut -d' ' -f1 > "${f}.sha1"
             md5sum "$f" | cut -d' ' -f1 > "${f}.md5"
           done
 
+          # 7. 纯净压制 bundle.zip 并直推
           cd "$GITHUB_WORKSPACE/bundle"
-          zip -r "$GITHUB_WORKSPACE/bundle.zip" .
+          zip -r "$GITHUB_WORKSPACE/bundle.zip" io/
 
           cd "$GITHUB_WORKSPACE"
-          echo "Uploading bundle to Sonatype Central with UserToken..."
-          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC" \
+          curl -s -X POST "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC" \
             -H "Authorization: UserToken ${{ secrets.OSSRH_TOKEN }}" \
-            -F "bundle=@$GITHUB_WORKSPACE/bundle.zip")
-          echo "$RESPONSE"
-          if echo "$RESPONSE" | grep -q "HTTP_STATUS:20"; then
-            echo "Upload succeeded via UserToken!"
-            exit 0
-          fi
-
-          echo "Retrying with Basic Auth..."
-          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC" \
-            -H "Authorization: Basic ${{ secrets.OSSRH_TOKEN }}" \
-            -F "bundle=@$GITHUB_WORKSPACE/bundle.zip")
-          echo "$RESPONSE"
-          if echo "$RESPONSE" | grep -q "HTTP_STATUS:20"; then
-            echo "Upload succeeded via Basic Auth!"
-            exit 0
-          fi
-
-          echo "Upload failed!"
-          exit 1
+            -F "bundle=@$GITHUB_WORKSPACE/bundle.zip"
