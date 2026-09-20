@@ -9,25 +9,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Setup GPG and Publish
+      - name: Create POM File
         run: |
-          set -e
-          gpg --batch --passphrase '' --quick-gen-key "LiTrue <asozulujidef01@gmail.com>" default default never
-          KEY_ID=$(gpg --list-keys --with-colons asozulujidef01@gmail.com | awk -F: '/^fpr:/ {print $10; exit}')
-          gpg --keyserver keyserver.ubuntu.com --send-keys "$KEY_ID" || true
-
-          WORKDIR=$GITHUB_WORKSPACE
-          TARGET_DIR="$WORKDIR/bundle/io/github/chris-ops-sys/litrue-battery-specs/1.0.0"
-          mkdir -p "$TARGET_DIR"
-
-          cat << 'EOF' > "$TARGET_DIR/litrue-battery-specs-1.0.0.pom"
-<?xml version="1.0" encoding="UTF-8"?>
+          mkdir -p src/main/resources
+          python3 -c '
+pom_content = """<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -59,13 +45,26 @@ jobs:
         <url>https://www.litruebattery.com/</url>
     </scm>
 </project>
-EOF
+"""
+with open("pom.xml", "w", encoding="utf-8") as f:
+    f.write(pom_content.strip())
+'
 
-          README_PATH="$WORKDIR/README.md"
-          [ ! -f "$README_PATH" ] && echo "# LiTrue Battery Specifications" > "$README_PATH"
-          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0.jar" "$README_PATH"
-          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0-sources.jar" "$README_PATH"
-          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0-javadoc.jar" "$README_PATH"
+      - name: Build, Sign and Publish
+        run: |
+          set -e
+          gpg --batch --passphrase '' --quick-gen-key "LiTrue <asozulujidef01@gmail.com>" default default never
+          KEY_ID=$(gpg --list-keys --with-colons asozulujidef01@gmail.com | awk -F: '/^fpr:/ {print $10; exit}')
+          gpg --keyserver keyserver.ubuntu.com --send-keys "$KEY_ID" || true
+
+          TARGET_DIR="bundle/io/github/chris-ops-sys/litrue-battery-specs/1.0.0"
+          mkdir -p "$TARGET_DIR"
+          cp pom.xml "$TARGET_DIR/litrue-battery-specs-1.0.0.pom"
+
+          [ ! -f README.md ] && echo "# LiTrue Battery Specifications" > README.md
+          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0.jar" README.md
+          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0-sources.jar" README.md
+          zip -j "$TARGET_DIR/litrue-battery-specs-1.0.0-javadoc.jar" README.md
 
           cd "$TARGET_DIR"
           for f in *; do
@@ -77,10 +76,10 @@ EOF
             md5sum "$f" | cut -d' ' -f1 > "${f}.md5"
           done
 
-          cd "$WORKDIR/bundle"
-          zip -r "$WORKDIR/bundle.zip" .
+          cd "$GITHUB_WORKSPACE/bundle"
+          zip -r "$GITHUB_WORKSPACE/bundle.zip" .
 
-          cd "$WORKDIR"
-          curl -f -X POST "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC" \
+          cd "$GITHUB_WORKSPACE"
+          curl -v -X POST "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC" \
             -H "Authorization: Bearer ${{ secrets.OSSRH_TOKEN }}" \
             -F "bundle=@bundle.zip"
