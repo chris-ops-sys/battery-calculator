@@ -9,48 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create POM File
-        run: |
-          mkdir -p src/main/resources
-          python3 -c '
-pom_content = """<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.chris-ops-sys</groupId>
-    <artifactId>litrue-battery-specs</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
-    <name>LiTrue Battery Engineering Specs</name>
-    <description>Parametric sizing models and datasheets for 11 industrial battery architectures.</description>
-    <url>https://www.litruebattery.com/</url>
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>LiTrue Battery</name>
-            <email>asozulujidef01@gmail.com</email>
-            <organization>LiTrue Battery Technologies</organization>
-            <organizationUrl>https://www.litruebattery.com/</organizationUrl>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:git://github.com/chris-ops-sys/battery-calculator.git</connection>
-        <developerConnection>scm:git:ssh://github.com:chris-ops-sys/battery-calculator.git</developerConnection>
-        <url>https://www.litruebattery.com/</url>
-    </scm>
-</project>
-"""
-with open("pom.xml", "w", encoding="utf-8") as f:
-    f.write(pom_content.strip())
-'
-
-      - name: Build, Sign and Publish
+      - name: Sign and Publish
         run: |
           set -e
           gpg --batch --passphrase '' --quick-gen-key "LiTrue <asozulujidef01@gmail.com>" default default never
