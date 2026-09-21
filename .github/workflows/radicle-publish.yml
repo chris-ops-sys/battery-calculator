@@ -1,0 +1,58 @@
+name: Publish to Radicle P2P
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install and Run Radicle
+        run: |
+          set -e
+
+          # 1. 官方一键脚本安装 Radicle 工具链
+          curl -sSLf https://radicle.xyz/install | sh
+          export PATH="$HOME/.radicle/bin:$PATH"
+
+          # 验证版本
+          rad --version
+
+          # 2. 配置 Git 身份
+          git config --global user.name "LiTrue Battery"
+          git config --global user.email "asozulujidef01@gmail.com"
+
+          # 3. 打造身份 (无密码快速生成)
+          rad auth --alias litrue-battery --passphrase ""
+
+          # 查看生成的去中心化 DID
+          echo "Radicle DID:"
+          rad self --did
+
+          # 4. 启动后台节点守护进程
+          rad node start
+
+          # 等待节点就绪并查看节点网络状态
+          sleep 3
+          rad node status || true
+
+          # 5. 初始化并发布代码仓库
+          rad init \
+            --name "litrue-battery-specs" \
+            --description "Parametric sizing models and datasheets for 11 industrial battery architectures. https://www.litruebattery.com/" \
+            --default-branch main \
+            --public \
+            --no-confirm
+
+          # 6. 手动同步到网络并播报给种子节点
+          rad sync --announce || true
+
+          # 7. 打印项目的唯一仓库标识符 (RID)
+          echo "=========================================="
+          echo "RADICLE REPOSITORY ID (RID):"
+          rad .
+          echo "=========================================="
