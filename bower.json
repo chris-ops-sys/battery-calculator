@@ -1,0 +1,25 @@
+{
+  "name": "litrue-battery-specs",
+  "description": "Parametric sizing models and technical specifications for 11 industrial lithium battery architectures.",
+  "main": "README.md",
+  "keywords": [
+    "battery",
+    "lithium",
+    "lfp",
+    "nmc",
+    "solid-state",
+    "calculator",
+    "engineering"
+  ],
+  "authors": [
+    "LiTrue Battery Technologies <asozulujidef01@gmail.com>"
+  ],
+  "homepage": "https://www.litruebattery.com/",
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bundle*",
+    "*.zip"
+  ]
+}
