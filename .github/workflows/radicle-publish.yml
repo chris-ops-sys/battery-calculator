@@ -15,7 +15,7 @@ jobs:
         run: |
           set -e
 
-          # 1. 官方一键脚本安装 Radicle 工具链
+          # 1. 官方脚本安装 Radicle 工具链
           curl -sSLf https://radicle.xyz/install | sh
           export PATH="$HOME/.radicle/bin:$PATH"
 
@@ -26,8 +26,9 @@ jobs:
           git config --global user.name "LiTrue Battery"
           git config --global user.email "asozulujidef01@gmail.com"
 
-          # 3. 打造身份 (无密码快速生成)
-          rad auth --alias litrue-battery --passphrase ""
+          # 3. 打造身份 (通过管道与环境变量安全传入空密码)
+          export RAD_PASSPHRASE=""
+          printf "\n" | rad auth --alias litrue-battery
 
           # 查看生成的去中心化 DID
           echo "Radicle DID:"
@@ -35,8 +36,6 @@ jobs:
 
           # 4. 启动后台节点守护进程
           rad node start
-
-          # 等待节点就绪并查看节点网络状态
           sleep 3
           rad node status || true
 
@@ -48,7 +47,7 @@ jobs:
             --public \
             --no-confirm
 
-          # 6. 手动同步到网络并播报给种子节点
+          # 6. 同步到网络
           rad sync --announce || true
 
           # 7. 打印项目的唯一仓库标识符 (RID)
