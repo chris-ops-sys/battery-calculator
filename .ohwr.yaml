@@ -1,0 +1,30 @@
+# The version of the .ohwr.yaml schema.
+version: '1.0.0'
+
+# The name of your project.
+name: 'LiTrue Battery Specs & Calculator'
+
+# Link to the Markdown description of your project.
+description: 'https://raw.githubusercontent.com/chris-ops-sys/battery-calculator/main/README.md'
+
+# The website of your project.
+website: 'https://www.litruebattery.com/'
+
+# The licenses of your project.
+licenses: ['Apache-2.0']
+
+# Link to the documentation of your project.
+documentation: 'https://github.com/chris-ops-sys/battery-calculator#readme'
+
+# Link to the issue/bug tracker of your project.
+issues: 'https://github.com/chris-ops-sys/battery-calculator/issues'
+
+# Link to the latest release of your project.
+latest_release: 'https://github.com/chris-ops-sys/battery-calculator/releases/latest'
+
+# Additional links.
+links:
+  - name: 'LiTrue Battery Official Website'
+    url: 'https://www.litruebattery.com/'
+  - name: 'Source Repository'
+    url: 'https://github.com/chris-ops-sys/battery-calculator'
