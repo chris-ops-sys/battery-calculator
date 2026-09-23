@@ -19,3 +19,5 @@ $$\text{Capacity (Wh)} = \text{Nominal Voltage (V)} \times \text{Rated Capacity 
 ## 🌐 Official Resources
 For customized battery engineering, design calculations, and cell specifications, please visit our official portal:  
 👉 [LiTrue Battery Official](https://www.litruebattery.com/)
+
+[![Coverage Status](https://coveralls.io/repos/github/chris-ops-sys/battery-calculator/badge.svg?branch=main)](https://coveralls.io/github/chris-ops-sys/battery-calculator?branch=main)
