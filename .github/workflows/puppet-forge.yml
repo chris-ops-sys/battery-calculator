@@ -1,0 +1,31 @@
+name: Publish to Puppet Forge
+
+on:
+  workflow_dispatch:
+
+jobs:
+  forge-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+
+      - name: Install PDK and build module package
+        run: |
+          # 创建标准 Puppet 模块目录结构并打包
+          mkdir -p pkg/litrue-battery_specs-1.0.0
+          cp metadata.json README.md LICENSE pkg/litrue-battery_specs-1.0.0/ 2>/dev/null || true
+          tar -czf litrue-battery_specs-1.0.0.tar.gz -C pkg litrue-battery_specs-1.0.0
+
+      - name: Upload to Puppet Forge API
+        run: |
+          curl -f -sS -X POST "https://forgeapi.puppet.com/v3/releases" \
+            -H "Authorization: Bearer 4dbd7cc7a916a54b8fc88293087c54ba3d16cbe91d912866f3394356fcc9d7dc" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary @litrue-battery_specs-1.0.0.tar.gz
+          echo "Puppet Forge release uploaded successfully!"
