@@ -1,0 +1,20 @@
+{
+  "name": "@litrue/battery-calculator",
+  "version": "1.0.0",
+  "description": "Parametric sizing models and technical specifications for industrial lithium batteries",
+  "main": "index.js",
+  "homepage": "https://www.litruebattery.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chris-ops-sys/battery-calculator.git"
+  },
+  "keywords": [
+    "battery",
+    "lifepo4",
+    "nmc",
+    "energy-storage",
+    "calculator"
+  ],
+  "author": "LiTrue Battery <asozulujidef01@gmail.com>",
+  "license": "Apache-2.0"
+}
