@@ -1,4 +1,35 @@
-- name: Upload to Puppet Forge API
+name: Publish to Puppet Forge
+
+on:
+  workflow_dispatch:
+
+jobs:
+  forge-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install PDK
+        run: |
+          wget -q https://apt.puppet.com/puppet-tools-release-noble.deb -O puppet-tools.deb 2>/dev/null || wget -q https://apt.puppet.com/puppet-tools-release-jammy.deb -O puppet-tools.deb
+          sudo dpkg -i puppet-tools.deb || true
+          sudo apt-get update -qq
+          sudo apt-get install -y pdk
+
+      - name: Build Module with PDK
+        run: |
+          mkdir -p manifests
+          cat << 'EOF' > manifests/init.pp
+          # Class: battery_specs
+          # LiTrue Battery Specifications
+          class battery_specs {
+            notice('LiTrue Battery Specs initialized.')
+          }
+          EOF
+          pdk build --force
+
+      - name: Upload to Puppet Forge API
         run: |
           TARBALL=$(ls pkg/*.tar.gz | head -n 1)
           echo "Uploading $TARBALL to Puppet Forge..."
