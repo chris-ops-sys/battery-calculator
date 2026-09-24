@@ -11,16 +11,13 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          version: 8
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 22
 
       - name: Publish to pkg.pr.new
-        run: pnpm exec pkg-pr-new publish --compact
+        run: npx pkg-pr-new publish --compact
