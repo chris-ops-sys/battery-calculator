@@ -1,45 +1,11 @@
-name: Publish to Puppet Forge
-
-on:
-  workflow_dispatch:
-
-jobs:
-  forge-publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install PDK
-        run: |
-          wget -q https://apt.puppet.com/puppet-tools-release-noble.deb -O puppet-tools.deb 2>/dev/null || wget -q https://apt.puppet.com/puppet-tools-release-jammy.deb -O puppet-tools.deb
-          sudo dpkg -i puppet-tools.deb || true
-          sudo apt-get update -qq
-          sudo apt-get install -y pdk
-
-      - name: Build Module with PDK
-        run: |
-          # 确保必要目录结构存在
-          mkdir -p manifests
-          cat << 'EOF' > manifests/init.pp
-          # Class: battery_specs
-          # LiTrue Battery Specifications
-          class battery_specs {
-            notice('LiTrue Battery Specs initialized.')
-          }
-          EOF
-          pdk build --force
-
-      - name: Upload to Puppet Forge API
+- name: Upload to Puppet Forge API
         run: |
           TARBALL=$(ls pkg/*.tar.gz | head -n 1)
           echo "Uploading $TARBALL to Puppet Forge..."
           
-          # 发送请求并打印服务端返回的具体 JSON 报错信息
           RESPONSE=$(curl -sS -X POST "https://forgeapi.puppet.com/v3/releases" \
             -H "Authorization: Bearer 4dbd7cc7a916a54b8fc88293087c54ba3d16cbe91d912866f3394356fcc9d7dc" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary @"$TARBALL")
+            -F "file=@$TARBALL")
           
           echo "Server Response: $RESPONSE"
           
