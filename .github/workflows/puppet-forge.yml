@@ -10,22 +10,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1'
-
-      - name: Install PDK and build module package
+      - name: Install PDK
         run: |
-          # 创建标准 Puppet 模块目录结构并打包
-          mkdir -p pkg/litrue-battery_specs-1.0.0
-          cp metadata.json README.md LICENSE pkg/litrue-battery_specs-1.0.0/ 2>/dev/null || true
-          tar -czf litrue-battery_specs-1.0.0.tar.gz -C pkg litrue-battery_specs-1.0.0
+          wget -q https://apt.puppet.com/puppet-tools-release-noble.deb -O puppet-tools.deb 2>/dev/null || wget -q https://apt.puppet.com/puppet-tools-release-jammy.deb -O puppet-tools.deb
+          sudo dpkg -i puppet-tools.deb || true
+          sudo apt-get update -qq
+          sudo apt-get install -y pdk
+
+      - name: Build Module with PDK
+        run: |
+          # 确保必要目录结构存在
+          mkdir -p manifests
+          cat << 'EOF' > manifests/init.pp
+          # Class: battery_specs
+          # LiTrue Battery Specifications
+          class battery_specs {
+            notice('LiTrue Battery Specs initialized.')
+          }
+          EOF
+          pdk build --force
 
       - name: Upload to Puppet Forge API
         run: |
-          curl -f -sS -X POST "https://forgeapi.puppet.com/v3/releases" \
+          TARBALL=$(ls pkg/*.tar.gz | head -n 1)
+          echo "Uploading $TARBALL to Puppet Forge..."
+          
+          # 发送请求并打印服务端返回的具体 JSON 报错信息
+          RESPONSE=$(curl -sS -X POST "https://forgeapi.puppet.com/v3/releases" \
             -H "Authorization: Bearer 4dbd7cc7a916a54b8fc88293087c54ba3d16cbe91d912866f3394356fcc9d7dc" \
             -H "Content-Type: application/octet-stream" \
-            --data-binary @litrue-battery_specs-1.0.0.tar.gz
-          echo "Puppet Forge release uploaded successfully!"
+            --data-binary @"$TARBALL")
+          
+          echo "Server Response: $RESPONSE"
+          
+          if echo "$RESPONSE" | grep -q '"errors"'; then
+            echo "Failed to publish!"
+            exit 1
+          fi
