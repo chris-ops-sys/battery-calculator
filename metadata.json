@@ -1,0 +1,28 @@
+{
+  "name": "litrue-battery_specs",
+  "version": "1.0.0",
+  "author": "LiTrue",
+  "summary": "Parametric sizing models and engineering specs for industrial lithium battery packs",
+  "license": "Apache-2.0",
+  "source": "https://github.com/chris-ops-sys/battery-calculator",
+  "project_page": "https://www.litruebattery.com/",
+  "issues_url": "https://github.com/chris-ops-sys/battery-calculator/issues",
+  "dependencies": [],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu"
+    },
+    {
+      "operatingsystem": "Debian"
+    },
+    {
+      "operatingsystem": "CentOS"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 6.0.0 < 9.0.0"
+    }
+  ]
+}
