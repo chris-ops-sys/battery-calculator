@@ -23,17 +23,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: "Install Scorecard CLI"
-        run: |
-          wget -q https://github.com/ossf/scorecard/releases/download/v5.0.0/scorecard_5.0.0_linux_amd64.tar.gz
-          tar -xzf scorecard_5.0.0_linux_amd64.tar.gz
-          sudo mv scorecard /usr/local/bin/
-
-      - name: "Run Scorecard Analysis"
-        env:
-          GITHUB_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          scorecard --repo=github.com/${{ github.repository }} --format=sarif > results.sarif || true
+      - name: "Run analysis"
+        uses: ossf/scorecard-action@0864cf19026789058feabb7e87baa5f140aac736 # v2.3.1
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
 
       - name: "Upload artifact"
         uses: actions/upload-artifact@v4
@@ -41,3 +36,8 @@ jobs:
           name: SARIF file
           path: results.sarif
           retention-days: 5
+
+      - name: "Upload to code-scanning"
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
