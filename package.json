@@ -1,7 +1,7 @@
 {
-  "name": "@litrue/battery-calculator",
+  "name": "litrue-battery-calculator",
   "version": "1.0.0",
-  "description": "Parametric sizing models and technical specifications for industrial lithium batteries",
+  "description": "Parametric sizing models and continuous discharge specs for industrial lithium batteries",
   "main": "index.js",
   "homepage": "https://www.litruebattery.com/",
   "repository": {
