@@ -3,6 +3,7 @@
 <p align="left">
   <a href="https://www.litruebattery.com/"><img src="https://img.shields.io/badge/Official_Website-litruebattery.com-00B074?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Official Website" /></a>
   <a href="https://crates.io/crates/litrue_battery_calc"><img src="https://img.shields.io/crates/v/litrue_battery_calc?style=for-the-badge&color=blue&logo=rust" alt="Crates.io Version" /></a>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fchris-ops-sys%2Fbattery-calculator?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fchris-ops-sys%2Fbattery-calculator.svg?type=shield"/></a>
   <a href="https://docs.rs/litrue_battery_calc"><img src="https://img.shields.io/docsrs/litrue_battery_calc?style=for-the-badge&logo=docs.rs" alt="Docs.rs" /></a>
   <a href="https://coveralls.io/github/chris-ops-sys/battery-calculator?branch=main"><img src="https://coveralls.io/repos/github/chris-ops-sys/battery-calculator/badge.svg?branch=main&style=for-the-badge" alt="Coverage Status" /></a>
   <a href="https://www.litruebattery.com/"><img src="https://img.shields.io/badge/Tech-LFP_%7C_NMC_%7C_Solid--State-blueviolet?style=for-the-badge" alt="Battery Chemistry" /></a>
@@ -37,3 +38,7 @@ $$I_{\text{max}} = \text{Rated Capacity (Ah)} \times C\text{-rate}$$
 ## 🌐 Official Resources & Engineering Support
 For custom pack configuration, mechanical drawings, thermal simulation data, and BMS customization:
 👉 **[Visit LiTrue Battery Official Portal](https://www.litruebattery.com/)**
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fchris-ops-sys%2Fbattery-calculator.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fchris-ops-sys%2Fbattery-calculator?ref=badge_large)
