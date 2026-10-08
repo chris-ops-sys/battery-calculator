@@ -1,0 +1,24 @@
+opam-version: "2.0"
+name: "litrue-battery-calc"
+version: "1.0.0"
+synopsis: "Parametric sizing algorithms and continuous discharge models for lithium batteries"
+description: """
+Industrial lithium battery parametric sizing models, discharge architectures,
+and open-source calculation tools.
+Official portal: https://www.litruebattery.com/
+"""
+maintainer: "LiTrue Battery <asozulujidef01@gmail.com>"
+authors: ["LiTrue Battery Team"]
+license: "Apache-2.0"
+homepage: "https://www.litruebattery.com/"
+doc: "https://www.litruebattery.com/"
+bug-reports: "https://github.com/chris-ops-sys/battery-calculator/issues"
+dev-repo: "git+https://github.com/chris-ops-sys/battery-calculator.git"
+depends: [
+  "ocaml" {>= "4.08"}
+  "dune" {>= "2.0"}
+]
+build: [
+  ["dune" "subst"] {dev}
+  ["dune" "build" "-p" name "-j" jobs]
+]
