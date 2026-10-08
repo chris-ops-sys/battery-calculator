@@ -1,0 +1,14 @@
+[package]
+name = "litrue-battery-calc"
+version = "1.0.0"
+description = "Parametric sizing algorithms and continuous discharge models for lithium batteries"
+license = "Apache-2.0"
+homepage = "https://www.litruebattery.com/"
+repository = "https://github.com/chris-ops-sys/battery-calculator"
+
+[keywords]
+tags = ["battery", "lifepo4", "nmc", "energy-storage", "calculator"]
+
+[target.battery_calc]
+type = "interface"
+include-dirs = ["include"]
