@@ -1,5 +1,5 @@
 # LiTrue Battery Technical Documentation & Calculation Specs
-
+[![cpkg](https://img.shields.io/badge/cpkg-litrue--battery--calc-blue?style=flat-square&logo=c%2B%2B)](https://cpkg.io/pkg/litrue-battery-calc)
 <p align="left">
   <a href="https://www.litruebattery.com/"><img src="https://img.shields.io/badge/Official_Website-litruebattery.com-00B074?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Official Website" /></a>
   <a href="https://crates.io/crates/litrue_battery_calc"><img src="https://img.shields.io/crates/v/litrue_battery_calc?style=for-the-badge&color=blue&logo=rust" alt="Crates.io Version" /></a>
