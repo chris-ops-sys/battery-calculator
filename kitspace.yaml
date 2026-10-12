@@ -1,0 +1,5 @@
+summary: Parametric sizing algorithms, continuous discharge models and reference specs for industrial lithium batteries.
+site: https://www.litruebattery.com/
+color: blue
+readme: README.md
+ibom-enabled: false
